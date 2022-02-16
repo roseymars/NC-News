@@ -1,4 +1,9 @@
-const { selectTopics, selectArticleById } = require("../models/models.js");
+const {
+  selectTopics,
+  selectArticleById,
+  updateArticleVotes,
+} = require("../models/models.js");
+const { checkExists } = require("../db/helpers/utils.js");
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -14,10 +19,22 @@ exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   selectArticleById(article_id)
     .then((article) => {
-      console.log(article);
       res.status(200).send({ article });
     })
     .catch((err) => {
       next(err);
     });
+};
+
+exports.addArticleVotes = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+  Promise.all([
+    updateArticleVotes(inc_votes, article_id),
+    checkExists("articles", "article_id", article_id),
+  ])
+    .then(( [article] ) => {
+      res.status(201).send( { article });
+    })
+    .catch(next);
 };

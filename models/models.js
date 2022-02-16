@@ -18,9 +18,16 @@ exports.selectArticleById = (articleId) => {
     });
 };
 
-exports.updateVotes = (articleId, votes) => {
-  const queryValues = []
-  let queryStr = 'INSERT INTO articles SET inc_votes= inc_votes + $2 WHERE article_id=$1;'
-  
-
-}
+exports.updateArticleVotes = (votesToAdd, articleId) => {
+  return db
+    .query(
+      `UPDATE articles 
+      SET votes = votes + $1 
+      WHERE article_id = $2 
+      RETURNING *;`,
+      [votesToAdd, articleId]
+    )
+    .then(( { rows } ) => { 
+      return rows[0];
+    })
+};

@@ -1,6 +1,6 @@
 const express = require('express')
-const { getTopics, getArticleById } = require('./controllers/controllers.js')
-const { handleCustomErrors, handlePsqlErrors } = require('./errors/index.js')
+const { getTopics, getArticleById, addArticleVotes } = require('./controllers/controllers.js')
+const { handleCustomErrors, handlePsqlErrors, handleServerErrors } = require('./errors/index.js')
 
 const app = express()
 app.use(express.json())
@@ -11,14 +11,16 @@ app.all('/api', (req, res) => {
 
 app.get('/api/topics', getTopics)
 app.get('/api/articles/:article_id', getArticleById)
-app.get('/api/articles/notAnId')
+// app.get('/api/articles/notAnId')
+app.patch('/api/articles/:article_id', addArticleVotes)
 
 
 app.all('/*', (req, res) => {
-    res.status(404).send( { msg: "PATH REQUESTED NOT FOUND" } )
+    res.status(404).send(( { msg: "PATH REQUESTED NOT FOUND" } ))
 })
 
 app.use(handleCustomErrors)
 app.use(handlePsqlErrors)
+app.use(handleServerErrors)
 
 module.exports = app
