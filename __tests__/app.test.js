@@ -76,7 +76,6 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({ inc_votes: 50 })
       .expect(200)
       .then(({ body: { article } }) => {
-        console.log(article)
         expect(article).toEqual(
           expect.objectContaining({
             article_id: 7,
@@ -122,10 +121,9 @@ describe("PATCH /api/articles/:article_id", () => {
   test("status: 400 responds with message when given something other than number for inc_votes", () => {
     return request(app)
       .patch("/api/articles/7")
-      .send({ inc_votes: 'ncnews' })
+      .send({ inc_votes: "ncnews" })
       .expect(400)
       .then(({ body: { msg } }) => {
-        console.log(msg)
         expect(msg).toBe("Invalid input");
       });
   });
@@ -145,6 +143,27 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("ARTICLE REQUESTED NOT FOUND");
+      });
+  });
+});
+
+// --- GET all usernames ---
+
+describe("GET /api/users", () => {
+  test("status: 200 should respond with array of username objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(4);
+        expect(users).toBeInstanceOf(Object)
+        expect(users).toEqual([
+          { username: "butter_bridge" },
+          { username: "icellusedkars" },
+          { username: "rogersop" },
+          { username: "lurker" }
+        
+        ]);
       });
   });
 });
