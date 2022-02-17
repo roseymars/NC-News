@@ -156,14 +156,44 @@ describe("GET /api/users", () => {
       .expect(200)
       .then(({ body: { users } }) => {
         expect(users).toHaveLength(4);
-        expect(users).toBeInstanceOf(Object)
+        expect(users).toBeInstanceOf(Object);
         expect(users).toEqual([
           { username: "butter_bridge" },
           { username: "icellusedkars" },
           { username: "rogersop" },
-          { username: "lurker" }
-        
+          { username: "lurker" },
         ]);
+      });
+  });
+});
+// --- GET articles with selected props ---
+describe("GET /api/articles", () => {
+  test("status: 200 should respond with array of article objects with all properties EXCEPT body", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        console.log(articles);
+        expect(articles).toHaveLength(12);
+        expect(articles[0]).toBeInstanceOf(Object);
+        expect(articles[0]).toEqual({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        });
+      });
+  });
+  test("status: 200 respond with an array of articles, sorted by date as default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
   });
 });
