@@ -33,7 +33,7 @@ describe("GET /topicsz", () => {
       .get("/topicsz")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe('PATH REQUESTED NOT FOUND');
+        expect(msg).toBe("PATH REQUESTED NOT FOUND");
       });
   });
 });
@@ -52,18 +52,99 @@ describe("GET /api/articles/article_id", () => {
             topic: "mitch",
             author: "butter_bridge",
             body: "I find this existence challenging",
-            created_at: '2020-07-09T20:11:00.000Z',
+            created_at: "2020-07-09T20:11:00.000Z",
             votes: 100,
           })
         );
       });
   });
-  test('status: 400 responds when given article is not a valid one', () => {
-        return request(app)
-        .get('/api/articles/notAnId')
-        .expect(400)
-        .then(({ body: { msg }}) => {
-          expect(msg).toBe('Invalid input')
-        })
+  test("status: 400 responds when given article is not a valid one", () => {
+    return request(app)
+      .get("/api/articles/notAnId")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid input");
+      });
+  });
+});
+
+// --- PATCH articles ---
+describe("PATCH /api/articles/:article_id", () => {
+  test("status: 200 responds with article object featuring added votes", () => {
+    return request(app)
+      .patch("/api/articles/7")
+      .send({ inc_votes: 50 })
+      .expect(200)
+      .then(({ body: { article } }) => {
+        console.log(article)
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 7,
+            title: "Z",
+            topic: "mitch",
+            author: "icellusedkars",
+            body: "I was hungry.",
+            created_at: "2020-01-07T14:08:00.000Z",
+            votes: 50,
+          })
+        );
+      });
+  });
+  test("status: 200 responds with article object featuring decremented votes", () => {
+    return request(app)
+      .patch("/api/articles/7")
+      .send({ inc_votes: -50 })
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 7,
+            title: "Z",
+            topic: "mitch",
+            author: "icellusedkars",
+            body: "I was hungry.",
+            created_at: "2020-01-07T14:08:00.000Z",
+            votes: -50,
+          })
+        );
+      });
+  });
+
+  test("status: 400 responds with message when invalid id is given", () => {
+    return request(app)
+      .patch("/api/articles/ncnews")
+      .send({ inc_votes: 50 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid input");
+      });
+  });
+  test("status: 400 responds with message when given something other than number for inc_votes", () => {
+    return request(app)
+      .patch("/api/articles/7")
+      .send({ inc_votes: 'ncnews' })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        console.log(msg)
+        expect(msg).toBe("Invalid input");
+      });
+  });
+  test("status: 400 responds with message when no inc_votes key is included on request body", () => {
+    return request(app)
+      .patch("/api/articles/7")
+      .send({ no_votes: 50 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid input");
+      });
+  });
+  test("status: 404 responds with message when article given does not exist, but id type is valid", () => {
+    return request(app)
+      .patch("/api/articles/99999999")
+      .send({ inc_votes: 50 })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("ARTICLE REQUESTED NOT FOUND");
+      });
   });
 });
