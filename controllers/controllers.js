@@ -3,7 +3,7 @@ const {
   selectArticleById,
   updateArticleVotes,
 } = require("../models/models.js");
-const { checkExists } = require("../db/helpers/utils.js");
+const { checkExists } = require("../models/models-utils.js");
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -34,7 +34,7 @@ exports.addArticleVotes = (req, res, next) => {
     checkExists("articles", "article_id", article_id),
   ])
     .then(( [article] ) => {
-      res.status(201).send( { article });
+      res.status(200).send( { article });
     })
     .catch(next);
 };

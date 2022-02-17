@@ -70,12 +70,13 @@ describe("GET /api/articles/article_id", () => {
 
 // --- PATCH articles ---
 describe("PATCH /api/articles/:article_id", () => {
-  test("status: 201 responds with article object featuring added votes", () => {
+  test("status: 200 responds with article object featuring added votes", () => {
     return request(app)
       .patch("/api/articles/7")
       .send({ inc_votes: 50 })
-      .expect(201)
+      .expect(200)
       .then(({ body: { article } }) => {
+        console.log(article)
         expect(article).toEqual(
           expect.objectContaining({
             article_id: 7,
@@ -89,11 +90,11 @@ describe("PATCH /api/articles/:article_id", () => {
         );
       });
   });
-  test("status: 201 responds with article object featuring decremented votes", () => {
+  test("status: 200 responds with article object featuring decremented votes", () => {
     return request(app)
       .patch("/api/articles/7")
       .send({ inc_votes: -50 })
-      .expect(201)
+      .expect(200)
       .then(({ body: { article } }) => {
         expect(article).toEqual(
           expect.objectContaining({
@@ -124,6 +125,16 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({ inc_votes: 'ncnews' })
       .expect(400)
       .then(({ body: { msg } }) => {
+        console.log(msg)
+        expect(msg).toBe("Invalid input");
+      });
+  });
+  test("status: 400 responds with message when no inc_votes key is included on request body", () => {
+    return request(app)
+      .patch("/api/articles/7")
+      .send({ no_votes: 50 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
         expect(msg).toBe("Invalid input");
       });
   });
@@ -133,8 +144,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({ inc_votes: 50 })
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("PATH REQUESTED NOT FOUND");
+        expect(msg).toBe("ARTICLE REQUESTED NOT FOUND");
       });
   });
-  
 });
