@@ -1,19 +1,9 @@
 const {
-  selectTopics,
   selectArticleById,
   updateArticleVotes,
-} = require("../models/models.js");
+  selectArticles,
+} = require("../models/articles-models.js");
 const { checkExists } = require("../models/models-utils.js");
-
-exports.getTopics = (req, res, next) => {
-  selectTopics()
-    .then((topics) => {
-      res.status(200).send({ topics });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
@@ -33,8 +23,22 @@ exports.addArticleVotes = (req, res, next) => {
     updateArticleVotes(inc_votes, article_id),
     checkExists("articles", "article_id", article_id),
   ])
-    .then(( [article] ) => {
-      res.status(200).send( { article });
+    .then(([article]) => {
+      res.status(200).send({ article });
     })
     .catch(next);
 };
+
+exports.getArticles = (req, res, next) => {
+  selectArticles()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+
+}
