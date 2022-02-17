@@ -38,3 +38,5 @@ exports.selectArticles = () => {
       return rows;
     });
 };
+
+exports.selectComments

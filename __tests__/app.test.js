@@ -157,12 +157,14 @@ describe("GET /api/users", () => {
       .then(({ body: { users } }) => {
         expect(users).toHaveLength(4);
         expect(users).toBeInstanceOf(Object);
-        expect(users).toEqual([
-          { username: "butter_bridge" },
-          { username: "icellusedkars" },
-          { username: "rogersop" },
-          { username: "lurker" },
-        ]);
+        expect(users).toEqual(
+          expect.objectContaining([
+            { username: "butter_bridge" },
+            { username: "icellusedkars" },
+            { username: "rogersop" },
+            { username: "lurker" },
+          ])
+        );
       });
   });
 });
@@ -173,16 +175,19 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
-        console.log(articles);
         expect(articles).toHaveLength(12);
         expect(articles[0]).toBeInstanceOf(Object);
-        expect(articles[0]).toEqual({
-          article_id: expect.any(Number),
-          title: expect.any(String),
-          topic: expect.any(String),
-          author: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            })
+          );
         });
       });
   });
