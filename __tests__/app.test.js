@@ -219,7 +219,6 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-
 describe("/api/articles/:article_id/comments", () => {
   describe("GET", () => {
     test("status: 200 responds with array of comments, each of which has required properties", () => {
@@ -250,33 +249,32 @@ describe("/api/articles/:article_id/comments", () => {
         });
     });
   });
-  test('status: 400 responds with message when given invalid article id', () => {
+  test("status: 400 responds with message when given invalid article id", () => {
     return request(app)
-        .get("/api/articles/ncnews/comments")
-        .expect(400)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid input")
-         
-        });
+      .get("/api/articles/ncnews/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid input");
+      });
   });
-  test('status: 404 responds with message when given an article id that is a valid type but article does not exist', () => {
+  test("status: 404 responds with message when given an article id that is a valid type but article does not exist", () => {
     return request(app)
-        .get("/api/articles/99999999/comments")
-        .expect(404)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("Resource not found")
-        });
+      .get("/api/articles/99999999/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Resource not found");
+      });
   });
 });
 
-describe('api/articles', () => {
-  describe('GET (comment count)', () => {
-    test('each article object in array responds with comment_count property', () => {
+describe("api/articles", () => {
+  describe("GET (comment count)", () => {
+    test("status: 200 each article object in array responds with comment_count property", () => {
       return request(app)
-      .get("/api/articles")
+        .get("/api/articles")
         .expect(200)
         .then(({ body: { articles } }) => {
-          expect(articles).toHaveLength(12)
+          expect(articles).toHaveLength(12);
           articles.forEach((article) => {
             expect(article).toEqual(
               expect.objectContaining({
@@ -286,12 +284,11 @@ describe('api/articles', () => {
                 author: expect.any(String),
                 created_at: expect.any(String),
                 votes: expect.any(Number),
-                comment_count: expect.any(String)
-              }))
-        })
+                comment_count: expect.any(String),
+              })
+            );
+          });
+        });
     });
-    
   });
-  
-});
 });
