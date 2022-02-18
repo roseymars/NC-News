@@ -327,6 +327,18 @@ describe("/api/articles/:article_id/comments", () => {
           expect(msg).toBe("Invalid input");
         });
     });
+    test("status: 400 responds with message when given invalid article id", () => {
+      return request(app)
+        .post("/api/articles/ncnews/comments")
+        .send({
+          username: "butter_bridge",
+          body: "I'm like a bird, I meow and then fly away",
+        })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input");
+        });
+    });
   });
   
 });
