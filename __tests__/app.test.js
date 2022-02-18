@@ -58,16 +58,7 @@ describe("GET /api/articles/article_id", () => {
         );
       });
   });
-  test("status: 400 responds when given article is not a valid one", () => {
-    return request(app)
-      .get("/api/articles/notAnId")
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("Invalid input");
-      });
-  });
 });
-
 // --- PATCH articles ---
 describe("PATCH /api/articles/:article_id", () => {
   test("status: 200 responds with article object featuring added votes", () => {
@@ -178,6 +169,7 @@ describe("GET /api/articles", () => {
         expect(articles).toHaveLength(12);
         expect(articles[0]).toBeInstanceOf(Object);
         articles.forEach((article) => {
+          expect(article).toBeInstanceOf(Object);
           expect(article).toEqual(
             expect.objectContaining({
               article_id: expect.any(Number),
@@ -202,3 +194,29 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+// ------ comment_count ------
+describe("/api/articles/:article_id", () => {
+  describe("GET", () => {
+    it("status: 200 responds with a comment count property", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: 1,
+              title: "Living in the shadow of a great man",
+              author: "butter_bridge",
+              body: "I find this existence challenging",
+              created_at: "2020-07-09T20:11:00.000Z",
+              votes: 100,
+              comment_count: '11'
+            })
+          );
+        });
+    });
+  });
+});
+
+
