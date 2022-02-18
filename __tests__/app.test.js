@@ -314,9 +314,8 @@ describe("/api/articles/:article_id/comments", () => {
             })
           );
         });
-        
     });
-    test("status: 400 responds if user does not include comment key in comment post", () => {
+    test("status: 400 responds if user does not include comment in comment post", () => {
       return request(app)
         .post("/api/articles/1/comments")
         .send({
@@ -340,5 +339,4 @@ describe("/api/articles/:article_id/comments", () => {
         });
     });
   });
-  
 });
