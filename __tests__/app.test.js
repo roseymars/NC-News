@@ -45,7 +45,7 @@ describe("GET /api/articles/article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body: { article } }) => {
-        expect(article[0]).toEqual(
+        expect(article).toEqual(
           expect.objectContaining({
             article_id: 1,
             title: "Living in the shadow of a great man",
@@ -203,7 +203,7 @@ describe("/api/articles/:article_id", () => {
         .get("/api/articles/1")
         .expect(200)
         .then(({ body: { article } }) => {
-          expect(article[0]).toEqual(
+          expect(article).toEqual(
             expect.objectContaining({
               article_id: 1,
               title: "Living in the shadow of a great man",

@@ -13,7 +13,7 @@ exports.selectArticleById = (articleId) => {
       [articleId]
     )
     .then(({ rows }) => {
-      return rows;
+      return rows[0];
     });
 };
 
