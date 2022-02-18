@@ -133,7 +133,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({ inc_votes: 50 })
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("ARTICLE REQUESTED NOT FOUND");
+        expect(msg).toBe("Resource not found");
       });
   });
 });
@@ -183,7 +183,7 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("status: 200 respond with an array of articles, sorted by date as default", () => {
+  test("status: 200 responds with an array of articles, sorted by date as default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -198,7 +198,7 @@ describe("GET /api/articles", () => {
 // ------ comment_count ------
 describe("/api/articles/:article_id", () => {
   describe("GET", () => {
-    it("status: 200 responds with a comment count property", () => {
+    test("status: 200 responds with a comment count property", () => {
       return request(app)
         .get("/api/articles/1")
         .expect(200)
@@ -211,7 +211,7 @@ describe("/api/articles/:article_id", () => {
               body: "I find this existence challenging",
               created_at: "2020-07-09T20:11:00.000Z",
               votes: 100,
-              comment_count: '11'
+              comment_count: "11",
             })
           );
         });
@@ -220,3 +220,51 @@ describe("/api/articles/:article_id", () => {
 });
 
 
+describe("/api/articles/:article_id/comments", () => {
+  describe("GET", () => {
+    test("status: 200 responds with array of comments, each of which has required properties", () => {
+      return request(app)
+        .get("/api/articles/9/comments")
+        .expect(200)
+        .then(({ body: { comments } }) => {
+          expect(comments).toHaveLength(2);
+          comments.forEach((comment) => {
+            expect(comment).toEqual(
+              expect.objectContaining({
+                comment_id: expect.any(Number),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+              })
+            );
+          });
+        });
+    });
+    test("status: 200 responds with object containing empty array when article has no comments", () => {
+      return request(app)
+        .get("/api/articles/4/comments")
+        .expect(200)
+        .then(({ body: { comments } }) => {
+          expect(comments).toEqual([]);
+        });
+    });
+  });
+  test('status: 400 responds with message when given invalid article id', () => {
+    return request(app)
+        .get("/api/articles/ncnews/comments")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input")
+         
+        });
+  });
+  test('status: 404 responds with message when given an article id that is a valid type but article does not exist', () => {
+    return request(app)
+        .get("/api/articles/99999999/comments")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Resource not found")
+        });
+  });
+});
