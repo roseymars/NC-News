@@ -27,16 +27,15 @@ exports.updateArticleVotes = (votesToAdd, articleId) => {
       [votesToAdd, articleId]
     )
     .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: "ARTICLE REQUESTED NOT FOUND",
-        });
-      }
+      // if (rows.length === 0) {
+      //   return Promise.reject({
+      //     status: 404,
+      //     msg: "ARTICLE REQUESTED NOT FOUND",
+      //   });
+      // }
       return rows[0];
     });
 };
-
 
 exports.selectArticles = () => {
   return db
@@ -47,3 +46,12 @@ exports.selectArticles = () => {
       return rows;
     });
 };
+
+exports.selectCommentsByArticleId = (articleId) => {
+  return db
+    .query(`SELECT * FROM comments WHERE article_id = $1`, [articleId])
+    .then(({ rows }) => {
+        return rows
+    });
+    }
+  

@@ -1,7 +1,8 @@
 const {
   selectArticleById,
   updateArticleVotes,
-  selectArticles
+  selectArticles,
+  selectCommentsByArticleId,
 } = require("../models/articles-models.js");
 const { checkExists } = require("../models/models-utils.js");
 
@@ -39,3 +40,16 @@ exports.getArticles = (req, res, next) => {
     });
 };
 
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  Promise.all([
+    selectCommentsByArticleId(article_id),
+    checkExists("articles", "article_id", article_id),
+  ])
+    .then(([comments]) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
