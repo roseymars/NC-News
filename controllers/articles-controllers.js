@@ -32,8 +32,8 @@ exports.addArticleVotes = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   selectArticles()
-    .then((articles) => {
-      res.status(200).send({ articles });
+    .then((allArticles) => {
+      res.status(200).send({ articles: allArticles });
     })
     .catch((err) => {
       next(err);
