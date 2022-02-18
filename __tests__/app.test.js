@@ -268,3 +268,30 @@ describe("/api/articles/:article_id/comments", () => {
         });
   });
 });
+
+describe('api/articles', () => {
+  describe('GET (comment count)', () => {
+    test('each article object in array responds with comment_count property', () => {
+      return request(app)
+      .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toHaveLength(12)
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                comment_count: expect.any(String)
+              }))
+        })
+    });
+    
+  });
+  
+});
+});
