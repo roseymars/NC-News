@@ -339,4 +339,16 @@ describe("/api/articles/:article_id/comments", () => {
         });
     });
   });
+  test("status: 404 when article does not exist", () => {
+    return request(app)
+      .post("/api/articles/999999/comments")
+      .send({
+        username: "butter_bridge",
+        body: "I'm like a bird, I meow and then fly away",
+      })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("PATH REQUESTED NOT FOUND");
+      });
+  });
 });
