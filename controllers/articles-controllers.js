@@ -1,7 +1,7 @@
 const {
   selectArticleById,
   updateArticleVotes,
-  selectArticles,
+  selectArticles
 } = require("../models/articles-models.js");
 const { checkExists } = require("../models/models-utils.js");
 
@@ -39,6 +39,3 @@ exports.getArticles = (req, res, next) => {
     });
 };
 
-exports.getCommentsByArticleId = (req, res, next) => {
-
-}
