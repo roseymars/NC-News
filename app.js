@@ -15,14 +15,12 @@ const {
   handleServerErrors,
   pathNotFound,
 } = require("./errors/index.js");
+const { getApi } = require("./controllers/api-controllers.js");
 
 const app = express();
 app.use(express.json());
 
-// app.all('/api', (req, res) => {
-//     res.status(200).send( { msg: "OK" } )
-// })
-
+app.get("/api", getApi);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/users", getUsers);
