@@ -161,7 +161,7 @@ describe("GET /api/users", () => {
 });
 // --- GET articles with selected props ---
 describe("GET /api/articles", () => {
-  test("status: 200 should respond with array of article objects with all properties EXCEPT body", () => {
+  test("status: 200 should respond with array of article objects", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -169,7 +169,7 @@ describe("GET /api/articles", () => {
         expect(articles).toHaveLength(12);
         expect(articles[0]).toBeInstanceOf(Object);
         articles.forEach((article) => {
-          expect(article).toBeInstanceOf(Object);
+          // expect(article).toBeInstanceOf(Object);
           expect(article).toEqual(
             expect.objectContaining({
               article_id: expect.any(Number),
@@ -191,6 +191,100 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSortedBy("created_at", {
           descending: true,
         });
+      });
+  });
+  test("status: 200 each article object in array responds with comment_count property", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(12);
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              created_at: expect.any(String),
+              body: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(String),
+              // if get problems change commentcount back to String expected
+            })
+          );
+        });
+      });
+  });
+  test("status: 200 sort by query should sort articles by valid column", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("votes", { descending: true });
+      });
+  });
+  test("Status 200, should permit ordering by ascending and descending", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("created_at");
+      });
+  });
+  test("status: 200 order query should sort articles by ascending/descending", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSorted({ ascending: true });
+      });
+  });
+  test("status: 200 order query should sort articles by ascending/descending, defaults to descending", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSorted({ descending: true });
+      });
+  });
+  test("status: 200 topic query should filter articles by topic specified", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              title: expect.any(String),
+              topic: "cats",
+            })
+          );
+        });
+      });
+  });
+  test("status: 400 responds with message when invalid column is used in sort by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=invalid_column")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid sort query");
+      });
+  });
+  test("status: 400 responds with message when invalid order is given in order by query", () => {
+    return request(app)
+      .get("/api/articles?order=invalid_order")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid order query");
+      });
+  });
+  test("status: 404 responds with message when given a topic that does not exist", () => {
+    return request(app)
+      .get("/api/articles?topic=cheese")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Topic not found");
       });
   });
 });
@@ -267,31 +361,8 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-describe("api/articles", () => {
-  describe("GET (comment count)", () => {
-    test("status: 200 each article object in array responds with comment_count property", () => {
-      return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then(({ body: { articles } }) => {
-          expect(articles).toHaveLength(12);
-          articles.forEach((article) => {
-            expect(article).toEqual(
-              expect.objectContaining({
-                article_id: expect.any(Number),
-                title: expect.any(String),
-                topic: expect.any(String),
-                author: expect.any(String),
-                created_at: expect.any(String),
-                votes: expect.any(Number),
-                comment_count: expect.any(String),
-              })
-            );
-          });
-        });
-    });
-  });
-});
+// query articles ---
+
 describe("/api/articles/:article_id/comments", () => {
   describe("POST", () => {
     test("status: 201 returns object with the input username and body", () => {
@@ -349,6 +420,18 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("PATH REQUESTED NOT FOUND");
+        // return request(app)
+        //   .get("/api/articles/ncnews/comments")
+        //   .expect(400)
+        //   .then(({ body: { msg } }) => {
+        //     expect(msg).toBe("Invalid input");
+        //   });
       });
   });
 });
+
+// title
+// topic
+//author
+// created_at
+// votes

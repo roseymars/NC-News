@@ -5,8 +5,8 @@ const {
   getArticleById,
   addArticleVotes,
   getArticles,
+  postCommentByArticleId,
   getCommentsByArticleId,
-  postCommentByArticleId
 } = require("./controllers/articles-controllers.js");
 const {
   handleCustomErrors,

@@ -1,3 +1,4 @@
+const e = require("express");
 const {
   selectArticleById,
   updateArticleVotes,
@@ -13,9 +14,7 @@ exports.getArticleById = (req, res, next) => {
     .then((article) => {
       res.status(200).send({ article });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 exports.addArticleVotes = (req, res, next) => {
@@ -32,13 +31,14 @@ exports.addArticleVotes = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
-    .then((allArticles) => {
-      res.status(200).send({ articles: allArticles });
+  const { sort_by, order, topic } = req.query;
+  selectArticles(sort_by, order, topic)
+    // Promise.all([selectArticles(sort_by, order, topic), checkExists('topics', 'slug', topic)])
+    .then((articles) => {
+      console.log(articles);
+      res.status(200).send({ articles });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 exports.getCommentsByArticleId = (req, res, next) => {
@@ -50,9 +50,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .then(([comments]) => {
       res.status(200).send({ comments });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 exports.postCommentByArticleId = (req, res, next) => {
@@ -62,7 +60,5 @@ exports.postCommentByArticleId = (req, res, next) => {
     .then((comment) => {
       res.status(201).send({ comment });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };

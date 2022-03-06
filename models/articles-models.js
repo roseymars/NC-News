@@ -37,20 +37,45 @@ exports.updateArticleVotes = (votesToAdd, articleId) => {
     });
 };
 
-exports.selectArticles = () => {
-  return db
-    .query(
-      `
-  SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, COUNT(comments.comment_id) AS comment_count
+exports.selectArticles = (sort_by = "created_at", order = "DESC", topic) => {
+  const validSortBys = [
+    "comment_count",
+    "author",
+    "title",
+    "topic",
+    "created_at",
+    "votes",
+  ];
+
+  const validOrderBys = ["ASC", "DESC"];
+
+  if (!validSortBys.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Invalid sort query" });
+  }
+
+  if (!validOrderBys.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  }
+
+  let queryStr = `
+  SELECT articles.*, COUNT(comments.comment_id) AS comment_count
   FROM articles 
   LEFT JOIN comments
-  ON comments.article_id = articles.article_id
-  GROUP BY articles.article_id
-  ORDER BY articles.created_at DESC;`
-    )
-    .then(({ rows }) => {
-      return rows;
-    });
+  ON articles.article_id = comments.article_id`;
+
+  let queryValues = [];
+
+  if (topic) {
+    queryValues.push(topic);
+    queryStr += ` WHERE articles.topic = $1`;
+  }
+  queryStr += ` GROUP BY articles.article_id ORDER BY articles.${sort_by} ${order};`;
+
+  return db.query(queryStr, queryValues).then(({ rows }) => {
+    if (rows.length === 0)
+      return Promise.reject({ status: 404, msg: "Topic not found" });
+    return rows;
+  });
 };
 
 exports.selectCommentsByArticleId = (articleId) => {
@@ -62,9 +87,12 @@ exports.selectCommentsByArticleId = (articleId) => {
 };
 
 exports.addCommentByArticleId = (articleId, username, body) => {
-  return db.query(
-    `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING*;`,
-    [username, body, articleId]).then(({ rows }) => {
+  return db
+    .query(
+      `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING*;`,
+      [username, body, articleId]
+    )
+    .then(({ rows }) => {
       return rows[0];
-    })
-  }
+    });
+};
