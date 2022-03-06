@@ -6,7 +6,12 @@
     "description": "serves an array of all topics",
     "queries": [],
     "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
+      "topics": [
+        {
+          "slug": "football",
+          "description": "Footie!"
+        }
+      ]
     }
   },
   "GET /api/articles": {
@@ -23,5 +28,82 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an array for a chosen article id",
+    "queries": [],
+    "exampleResponse": {
+      "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341,
+          "votes": 1
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array of all comments for a chosen article id",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "body": "I hate streaming noses",
+          "votes": 0,
+          "author": "icellusedkars",
+          "article_id": 1,
+          "created_at": 1604437200000
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates inc_votes with given number and serves the array article",
+    "queries": [],
+    "exampleRequest": {
+      "inc_votes": 1
+    },
+    "exampleResponse": {
+      "article": {
+        "title": "Seafood substitutions are increasing",
+        "topic": "cooking",
+        "author": "weegembump",
+        "body": "Text from the article..",
+        "created_at": 1527695953341,
+        "votes": 2
+      }
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [{ "username": "butter_bridge" }]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adds comment for the chosen article id then serves it",
+    "queries": [],
+    "exampleRequest": {
+      "username": "butter_bridge",
+      "body": "project nearly hosted, time to boil the kettle"
+    },
+    "exampleResponse": {
+      "comment": {
+        "body": "project nearly hosted, time to boil the kettle",
+        "votes": 1000,
+        "author": "mars",
+        "article_id": 99,
+        "created_at": 1646603866000
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes comment for the chosen comment id",
+    "queries": [],
+    "exampleResponse": {}
   }
 }
