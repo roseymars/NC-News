@@ -7,6 +7,7 @@ const {
   getArticles,
   postCommentByArticleId,
   getCommentsByArticleId,
+  deleteCommentByCommentId,
 } = require("./controllers/articles-controllers.js");
 const {
   handleCustomErrors,
@@ -29,6 +30,7 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 app.patch("/api/articles/:article_id", addArticleVotes);
+app.delete("/api/comments/:comment_id", deleteCommentByCommentId);
 
 app.all("/*", pathNotFound);
 

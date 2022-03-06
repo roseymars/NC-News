@@ -420,18 +420,30 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("PATH REQUESTED NOT FOUND");
-        // return request(app)
-        //   .get("/api/articles/ncnews/comments")
-        //   .expect(400)
-        //   .then(({ body: { msg } }) => {
-        //     expect(msg).toBe("Invalid input");
-        //   });
       });
   });
 });
 
-// title
-// topic
-//author
-// created_at
-// votes
+describe("/api/comments/:comment_id", () => {
+  describe("DELETE", () => {
+    test("status: 204 should delete comment by comment id with no response", () => {
+      return request(app).delete("/api/comments/1").expect(204);
+    });
+    test("status: 400 should respond with message when given an invalid comment id", () => {
+      return request(app)
+        .delete("/api/comments/qwerty")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input");
+        });
+    });
+    test("status: 404 should respond with message when comment is not found", () => {
+      return request(app)
+        .delete("/api/comments/999999")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("comment not found");
+        });
+    });
+  });
+});
