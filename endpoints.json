@@ -88,7 +88,7 @@
     "description": "adds comment for the chosen article id then serves it",
     "queries": [],
     "exampleRequest": {
-      "username": "butter_bridge",
+      "username": "mars",
       "body": "project nearly hosted, time to boil the kettle"
     },
     "exampleResponse": {
