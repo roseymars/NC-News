@@ -103,7 +103,7 @@ exports.eraseCommentByCommentId = (commentId) => {
       `
   DELETE FROM comments
   WHERE comment_id = $1
-  RETURNING *;
+  RETURNING*;
 `,
       [commentId]
     )
