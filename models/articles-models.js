@@ -108,8 +108,10 @@ exports.eraseCommentByCommentId = (commentId) => {
       [commentId]
     )
     .then(({ rows }) => {
-      if (rows.length === 0)
+      if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: "comment not found" });
-      return rows;
+      } else {
+        return rows;
+      }
     });
 };
