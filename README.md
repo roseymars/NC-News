@@ -6,16 +6,16 @@ Welcome to NC News API. This is my backend project piece as part of my Software 
 
 ## Setup ##
 
-Firstly you will need to clone this repo 
+Firstly you will need to clone this repo:
 
 ```
 git clone 
 ```
 
 
-Then you can open it up in your favourite code editor. 
+Then you can open it up in your favourite code editor
 
-Afterwards use the 'npm install' command to install all the dependencies needed.
+Afterwards, in the root of the project, use the 'npm install' command to install all the dependencies needed:
 
 ```
 npm install
