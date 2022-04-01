@@ -15,7 +15,7 @@ git clone
 
 Then you can open it up in your favourite code editor
 
-Afterwards, in the root of the project, use the 'npm install' command to install all the dependencies needed:
+Afterwards, in the root of the project, install all the required dependencies:
 
 ```
 npm install
