@@ -1,6 +1,6 @@
 # NC News API #
 
-Welcome to NC News API. This is my backend project piece as part of my Software Development bootcamp project, where server endpoints have been created. Everything has been implemented using Test Driven Development and using custom error handling.
+Welcome to NC News API. This is my backend project piece as part of my Full Stack Software Development bootcamp project, where server endpoints have been created. This project has served as a backend to my frontend project, a news website, where I have been sending api requests in order to display the relevant data. Everything has been implemented using Test Driven Development and using custom error handling.
 
 # Instructions #
 
