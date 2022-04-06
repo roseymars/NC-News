@@ -209,7 +209,7 @@ describe("GET /api/articles", () => {
               created_at: expect.any(String),
               body: expect.any(String),
               votes: expect.any(Number),
-              comment_count: expect.any(String),
+              comment_count: expect.any(Number),
               // if get problems change commentcount back to String expected
             })
           );
