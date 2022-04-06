@@ -68,7 +68,7 @@ You can check your version of node by running this command:
 node -v
 ``
 
-## Software/Frameworks: ##
+## Tech Stack: ##
 
 * [psql](https://www.postgresql.org/)
 * [pg-format](https://www.npmjs.com/package/pg-format)
