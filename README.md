@@ -1,6 +1,6 @@
 # NC News API #
 
-Welcome to NC News API. This is my backend project piece as part of my Software Development bootcamp project, where server endpoints have been created. Everything has been implemented using Test Driven Development and using custom error handling.
+Welcome to NC News API. This is a RESTful API, where various server endpoints have been created. This project has served as a backend to my frontend project, a news website, where I have been sending api requests in order to display the relevant data. Everything has been implemented using Test Driven Development and using custom error handling.
 
 # Instructions #
 
@@ -50,7 +50,11 @@ npm run seed
 
 ## Running Tests ##
 
-In order to run all tests, use the "npm run test" command
+In order to run all tests, use the following command:
+
+``
+npm run test
+``
 
 
 ## Node.js and PostgreSQL minimum version requirements ##
@@ -58,6 +62,22 @@ In order to run all tests, use the "npm run test" command
 Node.js: 16.13.0
 PostgreSQL: 8.7.3
 
+You can check your version of node by running this command:
+
+``
+node -v
+``
+
+## Tech Stack: ##
+
+* [psql](https://www.postgresql.org/)
+* [pg-format](https://www.npmjs.com/package/pg-format)
+* [jest-sorted](https://www.npmjs.com/package/jest-sorted)
+* [jest](https://jestjs.io/)
+* [supertest](https://www.npmjs.com/package/supertest)
+* [express](https://expressjs.com/)
+* [dotenv](https://www.npmjs.com/package/dotenv)
+* [husky](https://www.npmjs.com/package/husky)
 
 ## Hosted version of NC News API ##
 
