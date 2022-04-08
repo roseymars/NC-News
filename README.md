@@ -1,6 +1,6 @@
 # NC News API #
 
-Welcome to NC News API. This is a RESTful API, where various server endpoints have been created. This project has served as a backend to my frontend project, a news website, where I have been sending api requests in order to display the relevant data. Everything has been implemented using Test Driven Development and using custom error handling.
+Welcome to NC News API. This is a RESTful API, where various server endpoints have been created. This project has served as a backend to my frontend project, a news website, which you can find [here](https://news-of-the-north.netlify.app/). Everything has been implemented using Test Driven Development and using custom error handling.
 
 # Instructions #
 
