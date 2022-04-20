@@ -77,7 +77,7 @@ node -v
 * [supertest](https://www.npmjs.com/package/supertest)
 * [express](https://expressjs.com/)
 * [dotenv](https://www.npmjs.com/package/dotenv)
-* [husky](https://www.npmjs.com/package/husky)
+* [husky](https://typicode.github.io/husky/#/)
 
 ## Hosted version of NC News API ##
 
